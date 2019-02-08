@@ -2,46 +2,43 @@ package com.dotin.course.services;
 
 import com.dotin.course.entities.Message;
 
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
 import java.util.List;
 import java.util.Optional;
 
+import static com.dotin.course.util.EMF.runJpaCode;
+import static com.dotin.course.util.EMF.runJpaCodeOpt;
+
 public class MessageServiceImpl implements MessageService{
-
-    public final EntityManagerFactory emf = Persistence.createEntityManagerFactory("HelloWorldpu");
-
 
     @Override
     public Message save(Message message) {
-
-        EntityManager entityManager = emf.createEntityManager();
-
-        entityManager.getTransaction().begin();
-
-        entityManager.persist(message);
-
-        entityManager.getTransaction().commit();
-
-        entityManager.getTransaction().begin();
-
-        entityManager.close();
-
-        return message;
+        return runJpaCode(entityManager -> {
+            entityManager.persist(message);
+            return message;
+        }, true);
     }
 
     @Override
     public List<Message> getAll() {
-
-        EntityManager entityManager = emf.createEntityManager();
-
-        return entityManager.
-                createQuery("select m from Message m").getResultList();
+       return runJpaCode(entityManager -> entityManager.createQuery("SELECT m FROM Message m").getResultList());
     }
 
     @Override
     public Optional<Message> getMessage(Long id) {
-        return Optional.ofNullable(emf.createEntityManager().find(Message.class, id));
+        return  runJpaCodeOpt(entityManager -> entityManager.find(Message.class, id));
+    }
+
+    @Override
+    public void delete(Message message) {
+        runJpaCodeOpt(entityManager -> {
+            entityManager.remove(message);
+            return null;
+        },true);
+    }
+
+    @Override
+    public void deleteAll() {
+        runJpaCode(entityManager -> entityManager
+                .createQuery("DELETE FROM Message").executeUpdate(),true);
     }
 }
