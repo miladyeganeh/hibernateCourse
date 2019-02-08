@@ -1,4 +1,4 @@
-package com.dotin.course;
+package com.dotin.course.entities;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -27,5 +27,13 @@ public class Message {
 
     public void setMessage(String message) {
         this.message = message;
+    }
+
+    @Override
+    public String toString() {
+        return "Message{" +
+                "id=" + id +
+                ", message='" + message + '\'' +
+                '}';
     }
 }
