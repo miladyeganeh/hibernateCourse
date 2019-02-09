@@ -34,8 +34,8 @@ public class Message {
     @Override
     public String toString() {
         return "Message{" +
-                "id=" + id +
-                ", message='" + message + '\'' +
+                "id =" + id +
+                ", message ='" + message + '\'' +
                 '}';
     }
 }
