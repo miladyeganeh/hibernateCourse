@@ -7,12 +7,15 @@ import java.util.Optional;
 import java.util.function.Function;
 
 public class EMF {
-    private static EntityManagerFactory INSTANCE = Persistence.createEntityManagerFactory("HelloWorldpu");
+    private static EntityManagerFactory INSTANCE = null;
 
     private EMF() {
     }
 
     public static EntityManagerFactory getInstance() {
+        if (INSTANCE == null)
+          INSTANCE = Persistence.createEntityManagerFactory("HelloWorldpu");
+
         return INSTANCE;
     }
 
